@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import 'mdb-react-ui-kit/dist/css/mdb.min.css';
 import './App.css';
 
-// Import components
 import Login from './components/Login';
 import Register from './components/Register';
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('token'));
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -22,17 +21,12 @@ function App() {
     localStorage.setItem('token', token);
   };
 
-  const handleLogout = () => {
-    setIsLoggedIn(false);
-    localStorage.removeItem('token');
-    window.location.href = '/login';
-  };
-
   return (
     <Router>
       <Routes>
         <Route path="/login" element={<Login onLogin={handleLogin} />} />
         <Route path="/register" element={<Register />} />
+        <Route path="*" element={<Navigate to={isLoggedIn ? "/home" : "/login"} />} />
       </Routes>
     </Router>
   );
