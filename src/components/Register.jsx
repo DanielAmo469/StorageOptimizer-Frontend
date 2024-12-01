@@ -16,6 +16,7 @@ const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [verifyPassword, setVerifyPassword] = useState("");
+  const [registration_request_description, serRegistrationRequestDescription] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
@@ -28,20 +29,21 @@ const Register = () => {
         email,
         password,
         verify_password: verifyPassword,
+        registration_request_description,
       });
-      setMessage("Registration successful");
+      setMessage("Registration Request successful");
       setError("");
-      console.log("Registration successful", data);
+      console.log("Registration Request successful", data);
 
       // Store the success message in localStorage
-      localStorage.setItem("registrationSuccessMessage", "Registration successful");
+      localStorage.setItem("registrationRequestSuccessMessage", "Registration Request successful");
 
       // Redirect to login page after successful registration
       navigate("/login");
     } catch (error) {
       setMessage("");
-      setError(error.response.data.detail || "Registration failed");
-      console.error("Registration failed", error.response.data.detail);
+      setError(error.response.data.detail || "Registration Request failed");
+      console.error("Registration Request failed", error.response.data.detail);
     }
   };
 
@@ -92,6 +94,15 @@ const Register = () => {
                 size="lg"
                 value={verifyPassword}
                 onChange={(e) => setVerifyPassword(e.target.value)}
+              />
+              <MDBInput
+                wrapperClass="mb-4 mx-5 w-100"
+                labelClass="text-white"
+                label="Registration Request Description"
+                type="text"
+                size="lg"
+                value={registration_request_description}
+                onChange={(e) => serRegistrationRequestDescription(e.target.value)}
               />
               <MDBBtn className="px-5" size="lg" onClick={handleSubmit}>
                 Register

@@ -5,6 +5,8 @@ import './App.css';
 
 import Login from './components/Login';
 import Register from './components/Register';
+import PrivateRoute from './components/PrivateRoute';
+import LandingPage from './components/LandingPage';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -26,7 +28,8 @@ function App() {
       <Routes>
         <Route path="/login" element={<Login onLogin={handleLogin} />} />
         <Route path="/register" element={<Register />} />
-        <Route path="*" element={<Navigate to={isLoggedIn ? "/home" : "/login"} />} />
+        <Route path="/landing-page" element={<PrivateRoute isLoggedIn={isLoggedIn}><LandingPage /></PrivateRoute>} />
+        <Route path="*" element={<Navigate to={isLoggedIn ? "/landing-page" : "/login"} />} />
       </Routes>
     </Router>
   );
