@@ -7,6 +7,8 @@ import Login from './components/Login';
 import Register from './components/Register';
 import PrivateRoute from './components/PrivateRoute';
 import LandingPage from './components/LandingPage';
+import RegisterRequests from './components/RegistrationRequests';
+import Navbar from './components/Navbar';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -23,12 +25,20 @@ function App() {
     localStorage.setItem('token', token);
   };
 
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+    localStorage.removeItem('token');
+    window.location.href = '/login';
+  };
+
   return (
     <Router>
+      <Navbar isLoggedIn={isLoggedIn} handleLogout={handleLogout} /> 
       <Routes>
         <Route path="/login" element={<Login onLogin={handleLogin} />} />
         <Route path="/register" element={<Register />} />
         <Route path="/landing-page" element={<PrivateRoute isLoggedIn={isLoggedIn}><LandingPage /></PrivateRoute>} />
+        <Route path="/registration-requests" element={<PrivateRoute isLoggedIn={isLoggedIn}><RegisterRequests /></PrivateRoute>} />
         <Route path="*" element={<Navigate to={isLoggedIn ? "/landing-page" : "/login"} />} />
       </Routes>
     </Router>

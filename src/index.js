@@ -4,14 +4,24 @@ import './index.css';
 import 'mdb-react-ui-kit/dist/css/mdb.min.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { QueryClient, QueryClientProvider } from "react-query";
+
 
 const container = document.getElementById("root");
 const root = createRoot(container);
+const queryClient = new QueryClient();
 
 root.render(
   <React.StrictMode>
     <App />
   </React.StrictMode>
+);
+
+ReactDOM.render(
+  <QueryClientProvider client={queryClient}>
+    <App />
+  </QueryClientProvider>,
+  document.getElementById("root"),
 );
 
 // If you want to start measuring performance in your app, pass a function
