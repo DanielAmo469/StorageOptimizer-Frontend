@@ -11,7 +11,7 @@ const RegistrationRequests = () => {
         const fetchRequests = async () => {
             try{
                 const token = localStorage.getItem('token');
-                const response = await axios.get('http://localhost:8000/registration-requests', {
+                const response = await axios.get('http://192.168.16.11:8000/registration-requests', {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
@@ -29,7 +29,7 @@ const RegistrationRequests = () => {
     const approveRequest = async (pending_user_id) => {
         try{
             const token = localStorage.getItem('token');
-            const response = await axios.post(`http://localhost:8000/registration-requests/${pending_user_id}/approve-registration/`, {}, {
+            const response = await axios.post(`http://192.168.16.11:8000/registration-requests/${pending_user_id}/approve-registration/`, {}, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -50,7 +50,7 @@ const RegistrationRequests = () => {
         try {
           console.log(pending_user_id)
             const token = localStorage.getItem('token');
-            const response = await axios.delete(`http://localhost:8000/registration-requests/${pending_user_id}/deny-registration/`, {
+            const response = await axios.delete(`http://192.168.16.11:8000/registration-requests/${pending_user_id}/deny-registration/`, {
                 headers: {
                     Authorization: `Bearer ${token}`, 
                 },
