@@ -1,46 +1,92 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import 'mdb-react-ui-kit/dist/css/mdb.min.css';
-import './App.css';
+import { AnimatePresence } from 'framer-motion';
+import './styles/App.css';
 
-import Login from './components/Login';
-import Register from './components/Register';
-import PrivateRoute from './components/PrivateRoute';
-import LandingPage from './components/LandingPage';
+import Login from './pages/Login';
+import Register from './pages/Register';
+import PrivateRoute from './routes/PrivateRoute';
+import LandingPage from './pages/LandingPage';
 import RegisterRequests from './components/RegistrationRequests';
+import AllUsersPage from './pages/AllUsersPage';
 import Navbar from './components/Navbar';
+import { PageWrapper } from './components/PageWrapper';
+import axios from 'axios';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
     if (token) {
       setIsLoggedIn(true);
+      // Fetch current user and store user_id
+      axios.get('http://192.168.16.11:8000/me', {
+        headers: { Authorization: `Bearer ${token}` }
+      })
+      .then(res => {
+        sessionStorage.setItem('user_id', res.data.user_id);
+        sessionStorage.setItem('username', res.data.username);
+        sessionStorage.setItem('email', res.data.email);
+      })
+      .catch(err => {
+        console.error('Failed to fetch user info:', err);
+        sessionStorage.clear();
+      });
     }
   }, []);
 
   const handleLogin = (token) => {
     setIsLoggedIn(true);
-    localStorage.setItem('token', token);
+    sessionStorage.setItem('token', token);
   };
 
   const handleLogout = () => {
     setIsLoggedIn(false);
-    localStorage.removeItem('token');
+    sessionStorage.removeItem('token');
+    sessionStorage.clear();
     window.location.href = '/login';
   };
 
   return (
     <Router>
-      <Navbar isLoggedIn={isLoggedIn} handleLogout={handleLogout} /> 
-      <Routes>
-        <Route path="/login" element={<Login onLogin={handleLogin} />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/landing-page" element={<PrivateRoute isLoggedIn={isLoggedIn}><LandingPage /></PrivateRoute>} />
-        <Route path="/registration-requests" element={<PrivateRoute isLoggedIn={isLoggedIn}><RegisterRequests /></PrivateRoute>} />
-        <Route path="*" element={<Navigate to={isLoggedIn ? "/landing-page" : "/login"} />} />
-      </Routes>
+      <Navbar isLoggedIn={isLoggedIn} handleLogout={handleLogout} />
+      <AnimatePresence mode="wait">
+        <Routes>
+          <Route path="/login" element={
+            <PageWrapper>
+              <Login onLogin={handleLogin} />
+            </PageWrapper>
+          } />
+          <Route path="/register" element={
+            <PageWrapper>
+              <Register />
+            </PageWrapper>
+          } />
+          <Route path="/landing-page" element={
+            <PrivateRoute isLoggedIn={isLoggedIn}>
+              <PageWrapper>
+                <LandingPage />
+              </PageWrapper>
+            </PrivateRoute>
+          } />
+          <Route path="/registration-requests" element={
+            <PrivateRoute isLoggedIn={isLoggedIn}>
+              <PageWrapper>
+                <RegisterRequests />
+              </PageWrapper>
+            </PrivateRoute>
+          } />
+          <Route path="/all-users" element={
+            <PrivateRoute isLoggedIn={isLoggedIn}>
+              <PageWrapper>
+                <AllUsersPage />
+              </PageWrapper>
+            </PrivateRoute>
+          } />
+          <Route path="*" element={<Navigate to={isLoggedIn ? "/landing-page" : "/login"} />} />
+        </Routes>
+      </AnimatePresence>
     </Router>
   );
 }
