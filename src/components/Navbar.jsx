@@ -1,101 +1,117 @@
-import React, { useEffect } from "react";
-import {
-  MDBNavbar,
-  MDBContainer,
-  MDBNavbarBrand,
-  MDBNavbarNav,
-  MDBNavbarItem,
-  MDBNavbarLink,
-  MDBBtn,
-  MDBIcon,
-} from "mdb-react-ui-kit";
+import React from "react";
+import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import "../styles/Navbar.css";
 
 const Navbar = ({ isLoggedIn, handleLogout }) => {
-    const navigate = useNavigate();
-  
-    useEffect(() => {
-  
-      if (isLoggedIn) {
-        // fetchRequestCounts();
-      }
-    }, [isLoggedIn]);
+  const navigate = useNavigate();
 
-    return(
-        <>
-        {isLoggedIn && (
-            <MDBNavbar expand="lg" light style={{ backgroundColor: "#1e3869" }}>
-              <MDBContainer fluid>
-                <MDBNavbarBrand
-                  href="#"
-                  className="text-white"
-                  onClick={() => navigate("/home")}
-                >
-                  <h3>Storage Optimizer</h3>
-                </MDBNavbarBrand>
-                <MDBNavbarNav className="me-auto mb-2 mb-lg-0">
-                  <MDBNavbarItem className="me-4">
-                    <MDBNavbarLink
-                      href="#"
-                      className="text-white"
-                      onClick={() => navigate("/landin-page")}
-                    >
-                      Statistics
-                    </MDBNavbarLink>
-                  </MDBNavbarItem>
-                  <MDBNavbarItem className="me-4">
-                    <MDBNavbarLink
-                      href="#"
-                      className="text-white"
-                      onClick={() => navigate("/statistics")}
-                    >
-                      Tier
-                    </MDBNavbarLink>
-                  </MDBNavbarItem>
-                  <MDBNavbarItem className="me-4">
-                    <MDBNavbarLink
-                      href="#"
-                      className="text-white"
-                      onClick={() => navigate("/tier")}
-                    >
-                      Users
-                    </MDBNavbarLink>
-                    </MDBNavbarItem>
-                  <MDBNavbarItem className="me-4">
-                    <MDBNavbarLink
-                      href="#"
-                      className="text-white"
-                      onClick={() => navigate("/users")}
-                    >
-                      System Prefrences
-                    </MDBNavbarLink>
-                    </MDBNavbarItem>
-                  <MDBNavbarItem className="me-4">
-                    <MDBNavbarLink
-                      href="#"
-                      className="text-white"
-                      onClick={() => navigate("/system-prefrences")}
-                    >
-                      My Account
-                    </MDBNavbarLink>
-                  </MDBNavbarItem>
-                </MDBNavbarNav>
-                <MDBNavbarNav className="d-flex justify-content-end">
-                  <MDBNavbarItem className='me-4'>
-                    {/* <NotificationBell requestCount={requestCount} /> */}
-                  </MDBNavbarItem>
-                  <MDBNavbarItem>
-                    <MDBBtn color="danger" onClick={handleLogout}>
-                      Logout <MDBIcon fas icon="sign-out-alt" />
-                    </MDBBtn>
-                  </MDBNavbarItem>
-                </MDBNavbarNav>
-              </MDBContainer>
-            </MDBNavbar>
-          )}
-          </>
-    )
+  const navItems = [
+    { name: "Statistics", path: "/landing-page" },
+    { name: "Tier Management", path: "/tier" },
+    { name: "User Management", path: "/all-users" },
+    { name: "System Preferences", path: "/system-preferences" },
+  ];
 
-}
+  const navVariants = {
+    hidden: { y: -100 },
+    visible: {
+      y: 0,
+      transition: {
+        duration: 0.5,
+        ease: "easeOut",
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: -20 },
+    visible: (i) => ({
+      opacity: 1,
+      y: 0,
+      transition: {
+        delay: i * 0.1,
+        duration: 0.3,
+      },
+    }),
+  };
+
+  if (!isLoggedIn) return null;
+
+  return (
+    <motion.nav
+      className="navbar"
+      initial="hidden"
+      animate="visible"
+      variants={navVariants}
+    >
+      <div className="navbar-container">
+        <motion.div
+          className="navbar-brand"
+          onClick={() => navigate("/landing-page")}
+          whileHover={{ opacity: 0.8 }}
+          whileTap={{ opacity: 0.9 }}
+        >
+          <img src={require('../assets/logo.png')} alt="Storage Optimizer" className="navbar-logo" />
+        </motion.div>
+
+        <div className="navbar-links">
+          {navItems.map((item, i) => (
+            <motion.div
+              key={item.name}
+              className="nav-item"
+              custom={i}
+              variants={itemVariants}
+            >
+              <motion.button
+                className="nav-link"
+                onClick={() => navigate(item.path)}
+              >
+                {item.name}
+              </motion.button>
+            </motion.div>
+          ))}
+        </div>
+
+        <motion.div
+          className="navbar-actions"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.5 }}
+        >
+          <motion.button
+            className="notification-button"
+            onClick={() => navigate("/registration-requests")}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+              <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+            </svg>
+          </motion.button>
+          <motion.button
+            className="logout-button"
+            onClick={handleLogout}
+            whileHover={{ opacity: 0.9 }}
+            whileTap={{ opacity: 0.8 }}
+          >
+            Logout
+          </motion.button>
+        </motion.div>
+      </div>
+    </motion.nav>
+  );
+};
 
 export default Navbar;
