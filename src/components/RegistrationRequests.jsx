@@ -6,8 +6,9 @@ import 'react-toastify/dist/ReactToastify.css';
 import '../styles/RegistrationRequests.css';
 
 const RegistrationRequests = () => {
-  const [userRole, setUserRole] = useState('admin'); // This would come from context/API
   const [requests, setRequests] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     const fetchRequests = async () => {
@@ -19,9 +20,16 @@ const RegistrationRequests = () => {
           },
         });
         setRequests(response.data);
+        setIsAdmin(true);
       } catch (error) {
-        console.error('Error fetching registration requests', error);
-        toast.error('Error fetching registration requests');
+        if (error.response && error.response.status === 403) {
+          setIsAdmin(false);
+        } else {
+          console.error('Error fetching registration requests:', error);
+          toast.error('Error fetching registration requests');
+        }
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -96,7 +104,20 @@ const RegistrationRequests = () => {
     }
   };
 
-  if (userRole !== 'admin') {
+  if (isLoading) {
+    return (
+      <motion.div 
+        className="registration-requests-container"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+      >
+        <div className="loading-message">Loading...</div>
+      </motion.div>
+    );
+  }
+
+  if (!isAdmin) {
     return (
       <motion.div 
         className="unauthorized-container"

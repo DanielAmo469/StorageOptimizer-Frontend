@@ -8,8 +8,8 @@ import '../styles/AllUsersPage.css';
 const AllUsersPage = () => {
   const [users, setUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [currentUserId, setCurrentUserId] = useState(Number(sessionStorage.getItem('user_id')));  // Get current user ID from sessionStorage
-  const [isAdmin, setIsAdmin] = useState(true); // Replace with real admin check from context/API
+  const [currentUserId, setCurrentUserId] = useState(Number(sessionStorage.getItem('user_id')));
+  const [currentUserRole, setCurrentUserRole] = useState(sessionStorage.getItem('role'));
   const [showPromoteModal, setShowPromoteModal] = useState(false);
   const [showRemoveModal, setShowRemoveModal] = useState(false);
   const [showDowngradeModal, setShowDowngradeModal] = useState(false);
@@ -55,9 +55,9 @@ const AllUsersPage = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
       setUsers(users.map(user => 
-        user.username === username ? { ...user, role: 'admin' } : user
+        user.username === username ? { ...user, role: 'manager' } : user
       ));
-      toast.success(`User '${username}' promoted to admin`);
+      toast.success(`User '${username}' promoted to manager`);
     } catch (error) {
       console.error('Error promoting user:', error);
       toast.error('Failed to promote user');
@@ -135,7 +135,7 @@ const AllUsersPage = () => {
           {filteredUsers.map((user, index) => (
             <motion.div 
               key={user.username} 
-              className={`user-row ${user.role} ${user.user_id === currentUserId ? 'current-user' : ''}`} 
+              className={`user-row ${user.role === 'manager' ? 'manager' : 'viewonly'} ${user.user_id === currentUserId ? 'current-user' : ''}`} 
               initial={{ opacity: 0, y: 20 }} 
               animate={{ opacity: 1, y: 0 }} 
               exit={{ opacity: 0, y: -20 }} 
@@ -146,15 +146,15 @@ const AllUsersPage = () => {
                   <span className="user-date">{formatDate(user.date_created)}</span>
                 </div>
                 <div className="user-details">
-                  <h3 className={`username ${user.user_id === currentUserId ? 'current-user-text' : ''}`}>
+                  <h3 className={`username ${user.role === 'manager' ? 'manager' : ''}`}>
                     {user.username} ({user.role})
-                    {user.user_id === currentUserId && <span className="current-user-badge">(You)</span>}
+                    {user.user_id === currentUserId && <span className="current-user-indicator">(You)</span>}
                   </h3>
-                  <p className={`user-email ${user.user_id === currentUserId ? 'current-user-text' : ''}`}>{user.email}</p>
+                  <p className={`user-email ${user.role === 'manager' ? 'manager' : ''}`}>{user.email}</p>
                 </div>
               </div>
 
-              {isAdmin && user.user_id !== currentUserId && (
+              {currentUserRole === 'manager' && user.user_id !== currentUserId && (
                 <div className="user-actions">
                   {user.role === 'viewonly' ? (
                     <>
@@ -192,9 +192,13 @@ const AllUsersPage = () => {
         </AnimatePresence>
       </div>
 
-      <ConfirmationModal isOpen={showPromoteModal} onClose={() => setShowPromoteModal(false)} onConfirm={() => handlePromoteUser(selectedUser?.username)} title="Promote User" message={`Are you sure you want to promote ${selectedUser?.username} to admin?`} />
-      <ConfirmationModal isOpen={showRemoveModal} onClose={() => setShowRemoveModal(false)} onConfirm={() => handleRemoveUser(selectedUser?.username)} title="Remove User" message={`Are you sure you want to remove ${selectedUser?.username}?`} />
-      <ConfirmationModal isOpen={showDowngradeModal} onClose={() => setShowDowngradeModal(false)} onConfirm={() => handleDowngradeUser(selectedUser?.username)} title="Downgrade User" message={`Are you sure you want to downgrade ${selectedUser?.username} to viewonly?`} />
+      {currentUserRole === 'manager' && (
+        <>
+          <ConfirmationModal isOpen={showPromoteModal} onClose={() => setShowPromoteModal(false)} onConfirm={() => handlePromoteUser(selectedUser?.username)} title="Promote User" message={`Are you sure you want to promote ${selectedUser?.username} to manager?`} />
+          <ConfirmationModal isOpen={showRemoveModal} onClose={() => setShowRemoveModal(false)} onConfirm={() => handleRemoveUser(selectedUser?.username)} title="Remove User" message={`Are you sure you want to remove ${selectedUser?.username}?`} />
+          <ConfirmationModal isOpen={showDowngradeModal} onClose={() => setShowDowngradeModal(false)} onConfirm={() => handleDowngradeUser(selectedUser?.username)} title="Downgrade User" message={`Are you sure you want to downgrade ${selectedUser?.username} to viewonly?`} />
+        </>
+      )}
     </motion.div>
   );
 };

@@ -8,7 +8,6 @@ export const registerUser = async (userData) => {
 };
 
 export const loginUser = async (credentials) => {
-    console.log("11")
     const response = await axios.post(`${API_URL}/login`, credentials, {
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
