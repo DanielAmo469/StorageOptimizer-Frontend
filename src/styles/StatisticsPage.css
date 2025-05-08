@@ -1,0 +1,162 @@
+/* General page styling */
+.statistics-page-container {
+  max-width: 1200px;
+  margin: 80px auto;
+  padding: 2rem;
+  background-color: #f9fafb;
+  color: #374151;
+}
+
+/* Chart clusters */
+.chart-cluster {
+  margin-bottom: 3rem;
+  padding: 1.5rem;
+  background: white;
+  border-radius: 1rem;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.cluster-header {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1e40af;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+/* Chart grid layout */
+.chart-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+/* Chart sizes */
+.chart-full {
+  grid-column: 1 / -1;
+}
+
+.chart-wide {
+  grid-column: span 2;
+}
+
+.chart-half {
+  grid-column: span 1;
+}
+
+/* Chart cards */
+.chart-card {
+  background: white;
+  border-radius: 1rem;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  padding: 1.5rem;
+  position: relative;
+}
+
+.chart-card:hover {
+  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+}
+
+/* Chart headers and metrics */
+.chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.chart-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.chart-metrics {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.metric-value {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #1e40af;
+  text-align: right;
+}
+
+.metric-label {
+  font-size: 0.8rem;
+  color: #6b7280;
+  display: block;
+}
+
+/* Chart content */
+.chart-content {
+  position: relative;
+}
+
+.chart-overlay-metric {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  background: rgba(59, 130, 246, 0.1);
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: bold;
+  color: #1e40af;
+}
+
+/* Description text */
+.stats-card-description, .chart-description {
+  font-size: 0.85rem;
+  color: #6b7280;
+  margin-top: 0.75rem;
+  line-height: 1.4;
+  font-style: italic;
+}
+
+.chart-description {
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+/* Responsive container override (for recharts) */
+.recharts-responsive-container {
+  width: 100% !important;
+}
+
+/* Tooltips & legend customization */
+.recharts-default-tooltip {
+  background: #f3f4f6 !important;
+  border: 1px solid #d1d5db !important;
+  color: #374151 !important;
+}
+
+/* Fallback message styling */
+.loading-message, .error-message {
+  text-align: center;
+  font-size: 1rem;
+  color: #6b7280;
+  padding: 2rem 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .statistics-page-container {
+    padding: 1rem;
+  }
+  
+  .chart-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .chart-wide, .chart-half {
+    grid-column: span 1;
+  }
+  
+  .chart-metrics {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
