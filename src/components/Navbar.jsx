@@ -7,7 +7,7 @@ const Navbar = ({ isLoggedIn, handleLogout }) => {
   const navigate = useNavigate();
 
   const navItems = [
-    { name: "Statistics", path: "/landing-page" },
+    { name: "Statistics", path: "/statistics" },
     { name: "Tier Management", path: "/tier" },
     { name: "User Management", path: "/all-users" },
     { name: "System Preferences", path: "/system-preferences" },
