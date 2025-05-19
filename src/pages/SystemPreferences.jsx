@@ -5,6 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 import '../styles/SystemPreferences.css';
+import loadUserData from '../App'
+
 
 const SystemPreferences = () => {
   const navigate = useNavigate();
@@ -24,6 +26,8 @@ const SystemPreferences = () => {
     eco: "Energy-saving mode that reduces scan frequency to minimize system load and power consumption. Best for systems with limited resources or downtime.",
     super: "High-performance mode with aggressive scanning and archiving. Use when maximum cleanup and speed are required, but it may increase system load."
   };
+
+    loadUserData();
 
   useEffect(() => {
     const token = sessionStorage.getItem('token');
@@ -248,12 +252,12 @@ const SystemPreferences = () => {
             ))}
           </div>
           {currentUserRole === 'manager' && settings.blacklist.length > 0 && (
-            <div className="button-group">
+            <div className="blacklist-buttons">
+              <button className="cancel" onClick={() => fetchSettings()}>Cancel</button>
               <button className="save" onClick={() => {
                 setShowModeConfirm(true);
                 setConfirmAction(() => () => updateSettings({ blacklist: settings.blacklist }));
               }}>Save Changes</button>
-              <button className="cancel" onClick={() => fetchSettings()}>Cancel</button>
             </div>
           )}
         </section>

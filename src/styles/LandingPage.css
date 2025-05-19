@@ -1,20 +1,26 @@
-.home-container {
+.landing-container {
     background-color: #f5f7fa;
-    padding: 60px 20px;
+    padding: 120px 20px 60px;
     text-align: center;
-    margin-top: 100px;
+    min-height: 100vh;
   }
   
   .home-title {
     font-size: 32px;
     font-weight: 700;
     margin-bottom: 10px;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
   }
   
   .home-subtitle {
     font-size: 18px;
     margin-bottom: 40px;
     color: #555;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
   }
   
   .home-cards {
@@ -23,6 +29,7 @@
     gap: 20px;
     max-width: 1200px;
     margin: 0 auto;
+    padding: 20px 0;
   }
   
   .home-card {
@@ -71,5 +78,172 @@
   .purple-card {
     background-color: #26026d;
     color: white;
+  }
+  
+  /* Recent Activity Section */
+  .recent-activity {
+    display: flex;
+    gap: 6rem;
+    margin-top: 2rem;
+    padding: 2rem;
+    max-width: 1500px;
+    margin: 0 auto;
+    justify-content: center;
+  }
+  
+  .recent-activity-left {
+    flex: 0 0 42%;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+  
+  .recent-activity-right {
+    flex: 0 0 42%;
+  }
+  
+  .recent-card {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin: 0.5rem 0;
+  }
+  
+  .recent-card-title {
+    color: #3b82f6;
+    font-weight: bold;
+    font-size: 1.2rem;
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid #e5e7eb;
+  }
+  
+  .recent-card-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 0 10px;
+  }
+  
+  .data-section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 0 10px;
+  }
+  
+  .data-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  
+  .data-row > div {
+    flex: 1;
+    min-width: 45%;
+  }
+  
+  .section-header {
+    color: #3b82f6;
+    font-weight: 600;
+    font-size: 1rem;
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid #e5e7eb;
+  }
+  
+  .label {
+    color: #3b82f6;
+    font-weight: 500;
+    font-size: 0.9rem;
+    word-break: break-word;
+  }
+  
+  .value {
+    color: #374151;
+    font-size: 0.9rem;
+    text-align: right;
+    word-break: break-word;
+  }
+  
+  .movement-item {
+    border-bottom: 1px solid #e5e7eb;
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .movement-item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+    margin-bottom: 0;
+  }
+  
+  .show-more-link {
+    margin-top: 0.75rem;
+    color: #1e40af;
+    font-weight: 500;
+    cursor: pointer;
+    text-align: center;
+    transition: color 0.2s;
+    user-select: none;
+    font-size: 0.95rem;
+  }
+  
+  .show-more-link:hover {
+    color: #1e3a8a;
+    text-decoration: underline;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 1024px) {
+    .recent-activity {
+      flex-direction: column;
+      gap: 3rem;
+    }
+    
+    .recent-activity-left,
+    .recent-activity-right {
+      flex: 0 0 100%;
+    }
+
+    .recent-card {
+      margin: 0.5rem 0;
+    }
+
+    .data-row > div {
+      min-width: 100%;
+    }
+
+    .value {
+      text-align: left;
+    }
+  }
+  
+  .nested-data {
+    margin: 0.5rem 0;
+    padding: 0.5rem;
+    background-color: #f8fafc;
+    border-radius: 6px;
+  }
+  
+  .nested-title {
+    color: #3b82f6;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+  
+  .nested-content {
+    padding-left: 1rem;
+    border-left: 2px solid #e5e7eb;
+  }
+  
+  .nested-content p {
+    margin: 0.25rem 0;
   }
   

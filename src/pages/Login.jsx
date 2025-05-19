@@ -2,11 +2,13 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Toast from "../components/Toast";
 import Button from "../components/Button";
+import { motion } from "framer-motion";
 
 const Login = ({ onLogin }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [toast, setToast] = useState({ message: "", type: "success" });
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -23,6 +25,7 @@ const Login = ({ onLogin }) => {
       setToast({ message: "Please fill in both fields.", type: "error" });
       return;
     }
+    setIsLoading(true);
     try {
       const response = await fetch("http://192.168.16.11:8000/login", {
         method: "POST",
@@ -33,12 +36,17 @@ const Login = ({ onLogin }) => {
       if (response.ok) {
         setToast({ message: "Login successful!", type: "success" });
         onLogin(data.access_token);
-        setTimeout(() => navigate("/home"), 1200);
+        setTimeout(() => {
+          setIsLoading(false);
+          navigate("/landing-page");
+        }, 1200);
       } else {
         setToast({ message: data.detail || "Login failed", type: "error" });
+        setIsLoading(false);
       }
     } catch (error) {
       setToast({ message: "Login failed", type: "error" });
+      setIsLoading(false);
     }
   };
 
@@ -51,7 +59,13 @@ const Login = ({ onLogin }) => {
       />
       <div className="row d-flex justify-content-center align-items-center h-100">
         <div className="col-12">
-          <div className="card my-5 mx-auto" style={{ borderRadius: "1.2rem", maxWidth: "320px" }}>
+          <motion.div 
+            className="card my-5 mx-auto" 
+            style={{ borderRadius: "1.2rem", maxWidth: "320px" }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
             <img src={require('../assets/logo.png')} alt="Storage Organizer Logo" className="card-logo" />
             <div className="card-body-content">
               <h2 className="fw-bold mb-2 text-uppercase" style={{ textAlign: "left", fontSize: "1.7rem", marginBottom: "1.1rem" }}>Login</h2>
@@ -63,6 +77,7 @@ const Login = ({ onLogin }) => {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Email"
                 autoComplete="username"
+                disabled={isLoading}
               />
               <input
                 type="password"
@@ -71,9 +86,30 @@ const Login = ({ onLogin }) => {
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Password"
                 autoComplete="current-password"
+                disabled={isLoading}
               />
-              <Button style={{ width: "100%", marginTop: "0.5rem" }} onClick={handleSubmit}>
-                Login
+              <Button 
+                style={{ width: "100%", marginTop: "0.5rem", position: "relative" }} 
+                onClick={handleSubmit}
+                disabled={isLoading}
+              >
+                {isLoading ? (
+                  <motion.div
+                    className="loading-spinner"
+                    animate={{ rotate: 360 }}
+                    transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                    style={{
+                      width: "20px",
+                      height: "20px",
+                      border: "2px solid #ffffff",
+                      borderTop: "2px solid transparent",
+                      borderRadius: "50%",
+                      margin: "0 auto"
+                    }}
+                  />
+                ) : (
+                  "Login"
+                )}
               </Button>
               <div style={{ width: "100%", marginTop: "1.2rem", textAlign: "left" }}>
                 <p className="mb-0" style={{ fontSize: "0.98rem" }}>
@@ -88,7 +124,7 @@ const Login = ({ onLogin }) => {
                 </p>
               </div>
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
     </div>

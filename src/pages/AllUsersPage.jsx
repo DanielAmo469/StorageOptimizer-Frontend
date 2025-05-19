@@ -4,22 +4,23 @@ import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import '../styles/AllUsersPage.css';
+import loadUserData from '../App'
 
 const AllUsersPage = () => {
   const [users, setUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [currentUserId, setCurrentUserId] = useState(Number(sessionStorage.getItem('user_id')));
-  const [currentUserRole, setCurrentUserRole] = useState(sessionStorage.getItem('role'));
+  const [currentUserId, setCurrentUserId] = useState(null);
+  const [currentUserRole, setCurrentUserRole] = useState(null);
   const [showPromoteModal, setShowPromoteModal] = useState(false);
   const [showRemoveModal, setShowRemoveModal] = useState(false);
   const [showDowngradeModal, setShowDowngradeModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
+  
+  //Upload the user data again
+  loadUserData();
 
   const apiBase = 'http://192.168.16.11:8000';
 
-  useEffect(() => {
-    fetchUsers();
-  }, []);
 
   const fetchUsers = async () => {
     try {
@@ -33,6 +34,24 @@ const AllUsersPage = () => {
       toast.error('Failed to fetch users');
     }
   };
+    const checkSessionData = () => {
+    const id = sessionStorage.getItem('user_id');
+    const role = sessionStorage.getItem('role');
+    if (id && role) {
+      setCurrentUserId(Number(id));
+      setCurrentUserRole(role);
+    } else {
+      // Wait a bit and try again
+      setTimeout(checkSessionData, 100);
+    }
+  };
+
+  useEffect(() => {
+    checkSessionData(); 
+    console.log(sessionStorage.getItem('user_id'))
+    console.log(sessionStorage.getItem('role'))   
+    fetchUsers();
+  }, []);
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
