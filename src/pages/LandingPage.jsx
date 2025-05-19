@@ -6,6 +6,7 @@ import homeFirst from '../assets/home-fisrt.png';
 import homeSecond from '../assets/home-second.png';
 import homeThird from '../assets/home-third.png';
 import { ResponsiveContainer, LineChart, CartesianGrid, XAxis, YAxis, Tooltip, Legend, Line } from 'recharts';
+import loadUserData from '../App'
 
 const COLORS = ['#FF9800', '#4CAF50']; // Orange for archived, Green for restored
 
@@ -18,6 +19,8 @@ const LandingPage = () => {
   const [visibleDecisions, setVisibleDecisions] = useState(1);
   const [visibleScans, setVisibleScans] = useState(1);
   const [fileStats, setFileStats] = useState({});
+
+  loadUserData();
 
   useEffect(() => {
     const fetchRecentData = async () => {
@@ -232,6 +235,7 @@ const LandingPage = () => {
       </div>
     );
   };
+  
 
   return (
     <div className="landing-container">

@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { motion } from 'framer-motion';
 import 'react-toastify/dist/ReactToastify.css';
 import '../styles/TierManagement.css';
 import robotImage from '../assets/Robot1.png';
@@ -57,9 +58,6 @@ const FileMovementsCard = () => {
 
   return (
     <div className="tier-management-card file-movements-card">
-      <div className="robot-container">
-        <img src={robotImage4} alt="File Movements Illustration" className="robot-image" />
-      </div>
       <div className="tier-management-text">
         <h2>File Movements Manager</h2>
         <p>
@@ -140,6 +138,9 @@ const FileMovementsCard = () => {
           </div>
         )}
       </div>
+      <div className="robot-container">
+        <img src={robotImage4} alt="File Movements Illustration" className="robot-image" />
+      </div>
     </div>
   );
 };
@@ -150,6 +151,7 @@ const TierManagement = () => {
   const [scanResults, setScanResults] = useState(null);
   const [selectedVolume, setSelectedVolume] = useState('');
   const [expanded, setExpanded] = useState(false);
+  const [currentUserRole, setCurrentUserRole] = useState(null);
 
   // New state variables for filter component
   const [filterVolume, setFilterVolume] = useState('');
@@ -173,6 +175,12 @@ const TierManagement = () => {
   const [selectedRestore, setSelectedRestore] = useState([]);
   const [archiveLoading, setArchiveLoading] = useState(false);
   const [restoreLoading, setRestoreLoading] = useState(false);
+
+  useEffect(() => {
+    // Get role from sessionStorage
+    const role = sessionStorage.getItem('role');
+    setCurrentUserRole(role);
+  }, []);
 
   const handleScanAll = async () => {
     setLoading(true);
@@ -566,6 +574,20 @@ const TierManagement = () => {
       setRestoreLoading(false);
     }
   };
+
+  if (currentUserRole === 'viewonly') {
+    return (
+      <motion.div 
+        className="unauthorized-container"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+      >
+        <h2>Access Denied</h2>
+        <p>You do not have permission to access this feature. Please contact your administrator for access.</p>
+      </motion.div>
+    );
+  }
 
   return (
     <div className="tier-management-page">

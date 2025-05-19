@@ -21,7 +21,7 @@ import axios from 'axios';
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  useEffect(() => {
+  const loadUserData = (() => {
     const token = sessionStorage.getItem('token');
     if (token) {
       setIsLoggedIn(true);
@@ -40,6 +40,10 @@ function App() {
         sessionStorage.clear();
       });
     }
+  })
+
+  useEffect(() => {
+    loadUserData()
   }, []);
 
   const handleLogin = (token) => {
