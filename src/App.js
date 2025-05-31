@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import './styles/App.css';
 
 import Login from './pages/Login';
@@ -12,12 +14,14 @@ import AllUsersPage from './pages/AllUsersPage';
 import SystemPreferences from './pages/SystemPreferences';
 import Navbar from './components/Navbar';
 import { PageWrapper } from './components/PageWrapper';
+import TierManagement from './pages/TierManagement';
+import StatisticsPage from './pages/StatisticsPage';
 import axios from 'axios';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  useEffect(() => {
+  const loadUserData = (() => {
     const token = sessionStorage.getItem('token');
     if (token) {
       setIsLoggedIn(true);
@@ -36,6 +40,10 @@ function App() {
         sessionStorage.clear();
       });
     }
+  })
+
+  useEffect(() => {
+    loadUserData()
   }, []);
 
   const handleLogin = (token) => {
@@ -53,6 +61,18 @@ function App() {
   return (
     <Router>
       <Navbar isLoggedIn={isLoggedIn} handleLogout={handleLogout} />
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
       <AnimatePresence mode="wait">
         <Routes>
           <Route path="/login" element={
@@ -79,20 +99,34 @@ function App() {
               </PageWrapper>
             </PrivateRoute>
           } />
-            <Route path="/all-users" element={
-              <PrivateRoute isLoggedIn={isLoggedIn}>
-                <PageWrapper>
-                  <AllUsersPage />
-                </PageWrapper>
-              </PrivateRoute>
-            } />
-            <Route path="/system-preferences" element={
-              <PrivateRoute isLoggedIn={isLoggedIn}>
-                <PageWrapper>
-                  <SystemPreferences />
-                </PageWrapper>
-              </PrivateRoute>
-            } />
+          <Route path="/all-users" element={
+            <PrivateRoute isLoggedIn={isLoggedIn}>
+              <PageWrapper>
+                <AllUsersPage />
+              </PageWrapper>
+            </PrivateRoute>
+          } />
+          <Route path="/system-preferences" element={
+            <PrivateRoute isLoggedIn={isLoggedIn}>
+              <PageWrapper>
+                <SystemPreferences />
+              </PageWrapper>
+            </PrivateRoute>
+          } />
+          <Route path="/tier" element={
+            <PrivateRoute isLoggedIn={isLoggedIn}>
+              <PageWrapper>
+                <TierManagement />
+              </PageWrapper>
+            </PrivateRoute>
+          } />
+          <Route path="/statistics" element={
+            <PrivateRoute isLoggedIn={isLoggedIn}>
+              <PageWrapper>
+                <StatisticsPage />
+              </PageWrapper>
+            </PrivateRoute>
+          } />
           <Route path="*" element={<Navigate to={isLoggedIn ? "/landing-page" : "/login"} />} />
         </Routes>
       </AnimatePresence>

@@ -1,0 +1,61 @@
+.btn {
+  border: none;
+  width: 15em;
+  height: 2.2rem;
+  border-radius: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  background: #FFFFFF;
+  cursor: pointer;
+  transition: all 450ms ease-in-out;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  padding: 0 1.5em;
+  margin: 0 auto;
+  width: auto;
+  min-width: fit-content;
+}
+
+.sparkle {
+  fill: #07a5a6;
+  transition: all 800ms ease;
+  width: 20px;
+  height: 20px;
+}
+
+.text {
+  font-weight: 600;
+  color: #07a5a6;
+  font-size: 0.95rem;
+}
+
+.btn:hover {
+  background: #07a5a6;
+  box-shadow: 0 4px 12px #07a5a6;
+  transform: translateY(-2px);
+}
+
+.btn:hover .text {
+  color: white;
+}
+
+.btn:hover .sparkle {
+  fill: white;
+  transform: scale(1.2);
+}
+
+.btn:disabled {
+  background: #F3F4F6;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+.btn:disabled .text {
+  color: #9CA3AF;
+}
+
+.btn:disabled .sparkle {
+  fill: #07a5a6;
+} 
