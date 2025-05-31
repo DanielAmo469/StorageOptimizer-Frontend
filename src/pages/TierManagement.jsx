@@ -9,7 +9,7 @@ import robotImage2 from '../assets/Robot2.png';
 import robotImage3 from '../assets/Robot3.png';
 import robotImage4 from '../assets/Robot4.png';
 import FancyActionButton from '../components/FancyActionButton';
-// Import Flaticon icons
+
 import pdfIcon from '../assets/icons/pdf.png';
 import pngIcon from '../assets/icons/png.png';
 import jpgIcon from '../assets/icons/jpg.png';
